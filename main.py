@@ -74,7 +74,7 @@ def root():
         return battleship_game.render_main_template(game_finished_message=finished_message)
 
 @app.route('/attack', methods=['GET'])
-def attack_endpoint():
+def process_attack():
     '''
     Does all the hits and misses, implementing the game logic.
     '''

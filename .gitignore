@@ -161,3 +161,4 @@ cython_debug/
 
 test_report.txt
 main(test).py
+.vscode

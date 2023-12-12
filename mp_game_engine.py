@@ -13,11 +13,10 @@ def generate_attack(board_size=10, last_hit=None):
     '''
     if last_hit is None:
         return (random.randint(0, board_size - 1), random.randint(0, board_size - 1))
-    else:
-        x, y = last_hit
-        possible_moves = [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
-        valid_moves = [(x, y) for x, y in possible_moves if 0 <= x < board_size and 0 <= y < board_size]
-        return random.choice(valid_moves)
+    x, y = last_hit
+    possible_moves = [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
+    valid_moves = [(x, y) for x, y in possible_moves if 0 <= x < board_size and 0 <= y < board_size]
+    return random.choice(valid_moves)
 
 def ai_opponent_game_loop():
     '''Game loop with AI multiplayer starts. Greets first, sets up the board and uses multiple game components.'''
