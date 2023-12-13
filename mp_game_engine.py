@@ -5,7 +5,7 @@ from components import initialise_board, create_battleships, place_battleships
 
 players = {}
 
-def generate_attack(board_size=10, last_hit=None):
+def generate_attack(board_size=10, last_hit=None, last_hit_direction=None):
     '''
     AI randomly chooses a coordinate to attack
     If there is no hit on a battleship, it returns a random coordinate
@@ -14,9 +14,19 @@ def generate_attack(board_size=10, last_hit=None):
     if last_hit is None:
         return (random.randint(0, board_size - 1), random.randint(0, board_size - 1))
     x, y = last_hit
-    possible_moves = [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
-    valid_moves = [(x, y) for x, y in possible_moves if 0 <= x < board_size and 0 <= y < board_size]
-    return random.choice(valid_moves)
+    directions = [(0, 1), (1, 0), (0, -1), (-1, 0)] 
+    if last_hit_direction is None:
+        last_hit_direction = random.choice(directions)
+    next_x, next_y = x + last_hit_direction[0], y + last_hit_direction[1]
+    if 0 <= next_x < board_size and 0 <= next_y < board_size:
+        return (next_x, next_y)
+
+    for direction in directions:
+        next_x, next_y = x + direction[0], y + direction[1]
+        if 0 <= next_x < board_size and 0 <= next_y < board_size:
+            return (next_x, next_y)
+    
+    return (random.randint(0, board_size - 1), random.randint(0, board_size - 1))
 
 def ai_opponent_game_loop():
     '''Game loop with AI multiplayer starts. Greets first, sets up the board and uses multiple game components.'''
@@ -45,6 +55,9 @@ def ai_opponent_game_loop():
     players["User"] = {"board": user_board, "ships": user_ships}
     players["AI_Opponent"] = {"board": ai_board, "ships": ai_ships}
 
+    last_hit = None
+    last_hit_direction = None
+
     while any(size > 0 for size in user_ships.values()) and any(size > 0 for size in ai_ships.values()):
         user = "It is your turn, user:"
         print(user)
@@ -60,8 +73,10 @@ def ai_opponent_game_loop():
             break
 
         print("\nAI Opponent's Turn:")
-        ai_coordinates = generate_attack(board_size)
+        ai_coordinates = generate_attack(board_size, last_hit, last_hit_direction)
         ai_result = attack(ai_coordinates, user_board, user_ships)
+        last_hit = ai_coordinates if ai_result else None
+        last_hit_direction = None if ai_result else last_hit_direction
         print_board_hits(user_board)
         print(f"AI Opponent's Turn Result: {'Hit!' if ai_result else 'Miss!'}")
 
