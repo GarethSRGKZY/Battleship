@@ -1,16 +1,18 @@
 '''Modules'''
+from typing import Tuple, List, Dict, Union
 import pyttsx3
 from components import initialise_board, create_battleships, place_battleships
+
 
 previous_hits = set()
 engine = pyttsx3.init()  
 
-def speak(audio):
+def speak(audio: str) -> None:
     '''For extra purposes'''
     engine.say(audio)
     engine.runAndWait()
 
-def attack(coordinates, board, battleships):
+def attack(coordinates: Tuple[int, int], board: List[List[Union[None, str]]], battleships: Dict[str, int]) -> bool:
     '''Does the attack function.'''
     x, y = coordinates
     target = board[y][x] #Was originally board[x][y] but modified after logic error...
@@ -25,11 +27,11 @@ def attack(coordinates, board, battleships):
 
         board[y][x] = None  # Change the symbol when a ship is hit
         return True
-    else:
-        print("Miss!")
-        return False
 
-def cli_coordinates_input():
+    print("Miss!")
+    return False
+
+def cli_coordinates_input() -> Tuple[int, int]:
     '''Ask user for the X and Y coordinates.'''
     while True:
         try:
@@ -53,12 +55,12 @@ def cli_coordinates_input():
         except ValueError:
             print("Invalid input. Please enter numeric values for coordinates.")
 
-def print_board_hits(board):
+def print_board_hits(board: List[List[Union[None, str]]]) -> None:
     '''Prints the board. If a coordinate of a board is hit, an X is returned to the board.'''
     for row in board:
         print(" ".join('X' if cell == 'X' else '.' if cell is None else cell for cell in row))
 
-def simple_game_loop():
+def simple_game_loop() -> None:
     '''Starts the game'''
     print("Welcome to the Battleship Game!")
 

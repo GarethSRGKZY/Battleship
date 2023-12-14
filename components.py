@@ -1,14 +1,15 @@
 '''Modules'''
 import random
 import json
+from typing import List, Dict, Union, Any, Literal
 
 #Initialise board
-def initialise_board(size=10):
+def initialise_board(size: int = 10) -> List[List[Union[None, Any]]]:
     '''Returns a 10 x 10 board with the word None.'''
     return [[None] * size for _ in range(size)]
 
 #create battleships
-def create_battleships(filename="battleships.txt"):
+def create_battleships(filename: str = "battleships.txt") -> Dict[str, int]:
     '''Opens battleship.txt file as filename is default.'''
     with open(filename, 'r', encoding="utf-8") as file:
         battleships_data = file.readlines()
@@ -20,7 +21,7 @@ def create_battleships(filename="battleships.txt"):
 
     return battleships
 
-def placement_from_file(filename="placement.json"):
+def placement_from_file(filename: str = "placement.json") -> Dict[str, List[int]]:
     '''Parsing the JSON file'''
     with open(filename, 'r',  encoding="utf-8") as file:
         placement_json = file.read()
@@ -28,7 +29,7 @@ def placement_from_file(filename="placement.json"):
         return placement_data
 
 #Place battleships
-def place_battleships(board, ships, algorithm='simple', placement_data=placement_from_file("placement.json")):
+def place_battleships(board: List[List[Union[None, Any]]], ships: Dict[str, int], algorithm: Literal['simple', 'random', 'custom'] = 'simple', placement_data: Dict[str, List[int]] = placement_from_file("placement.json")) -> List[List[Union[None, Any]]]:
     '''Battleship will be placed according to the algorithm'''
     if algorithm == 'simple':
         return simple_placement(board, ships)
@@ -40,7 +41,7 @@ def place_battleships(board, ships, algorithm='simple', placement_data=placement
         raise ValueError("Invalid algorithm")
 
 #Simple
-def simple_placement(board, ships):
+def simple_placement(board: List[List[Union[None, Any]]], ships: Dict[str, int]) -> List[List[Union[None, Any]]]:
     '''Simple algorithm: Placing ships in horizontal rows only. Starting from (0,0)'''
     row = 0
     for ship_name, ship_size in ships.items():
@@ -50,7 +51,7 @@ def simple_placement(board, ships):
     return board
 
 #Random
-def random_placement(board, ships):
+def random_placement(board: List[List[Union[None, Any]]], ships: Dict[str, int]) -> List[List[Union[None, Any]]]:
     '''Random algorithm: Placing ships in either horizontal or vertical. Placing ships in random coordinates.'''
     for ship_name, ship_size in ships.items():
         placed = False
@@ -73,7 +74,7 @@ def random_placement(board, ships):
     return board
 
 #Custom
-def custom_placement(board, ships, placement_data):
+def custom_placement(board: List[List[Union[None, Any]]], ships: Dict[str, int], placement_data: Dict[str, List[int]] = placement_from_file("placement.json")) -> List[List[Union[None, Any]]]:
     '''Custom algorithm: This is according to the placement.json file.'''
     for ship_name, position in placement_data.items():
         col, row, orientation = map(str, position)

@@ -1,3 +1,5 @@
+'''Modules'''
+from typing import Optional, Union, Any
 from flask import Flask, request, render_template, jsonify
 from components import initialise_board, create_battleships, place_battleships
 from game_engine import attack
@@ -7,7 +9,7 @@ app = Flask(__name__)
 
 class BattleshipGame:
     '''Class for all the variables'''
-    def reset(self):
+    def reset(self) -> None:
         '''Resets the whole board so that there is no "hijacking"'''
         self.user_board = initialise_board(size=self.board_size)
         self.ai_board = initialise_board(size=self.board_size)
@@ -43,19 +45,19 @@ class BattleshipGame:
         place_battleships(self.ai_board, self.ai_ships, algorithm='random')
         '''
 
-    def render_main_template(self, game_finished_message=None):
+    def render_main_template(self, game_finished_message: Optional[str] = None) -> str:
         '''Renders the main board. When game is finished, message is displayed.'''
         print(self.user_board)
         return render_template('main.html', player_board=self.user_board, game_finished_message=game_finished_message)
 
-    def render_placement_template(self):
+    def render_placement_template(self) -> str:
         '''Renders the placement board'''
         return render_template('placement.html', ships=self.ships, board_size=self.board_size)
 
 battleship_game = BattleshipGame()
 
 @app.route('/placement', methods=['GET', 'POST'])
-def placement_interface():
+def placement_interface() -> Union[str, Any]:
     '''Renders the board placement first. If placement is done, messages display a success message.'''
     if request.method == 'GET':
         return battleship_game.render_placement_template()
@@ -68,7 +70,7 @@ def placement_interface():
         return jsonify({"message": "Received!"})
 
 @app.route('/', methods=['GET', 'POST'])
-def root():
+def root() -> str:
     '''Renders the main board'''
     if request.method == 'GET':
         return battleship_game.render_main_template()
@@ -78,7 +80,7 @@ def root():
         return battleship_game.render_main_template(game_finished_message=finished_message)
 
 @app.route('/attack', methods=['GET'])
-def process_attack():
+def process_attack() -> Union[str, Any]:
     '''
     Does all the hits and misses, implementing the game logic.
     '''
@@ -121,17 +123,14 @@ def process_attack():
 
         # AI coordinates are added to a list that are hit before
         battleship_game.ai_hit_before.add(ai_turn)
-        
-
         ##print("AI: ", battleship_game.ai_ships)
         ##print("USER: ", battleship_game.user_ships)
 
         if all(size == 0 for size in battleship_game.ai_ships.values()):
             return jsonify({'hit': result, 'AI_Turn': ai_turn, 'finished': 'Game Over - Player wins (Congrats for playing!)'})
-        elif all(size == 0 for size in battleship_game.user_ships.values()):
+        if all(size == 0 for size in battleship_game.user_ships.values()):
             return jsonify({'hit': ai_result, 'AI_Turn': ai_turn, 'finished': 'Game Over - AI wins (AI is taking over the world!)'})
-        else:
-            return jsonify({'hit': result, 'AI_Turn': ai_turn, 'finished': None})
+        return jsonify({'hit': result, 'AI_Turn': ai_turn, 'finished': None})
         
 if __name__ == "__main__":
     app.template_folder = "templates"

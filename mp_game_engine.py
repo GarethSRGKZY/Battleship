@@ -1,11 +1,12 @@
 '''Modules'''
+from typing import Tuple, Optional, Set
 import random
 from game_engine import speak, attack, cli_coordinates_input, print_board_hits
 from components import initialise_board, create_battleships, place_battleships
 
 players = {}
 
-def generate_attack(board_size=10, last_hit=None, last_hit_direction=None, previous_miss=None):
+def generate_attack(board_size: int = 10, last_hit: Optional[Tuple[int, int]] = None, last_hit_direction: Optional[Tuple[int, int]] = None, previous_miss: Optional[Set[Tuple[int, int]]] = None) -> Tuple[int, int]:
     '''
     AI randomly chooses a coordinate to attack
     If there is no hit on a battleship, it returns a random coordinate
@@ -29,7 +30,7 @@ def generate_attack(board_size=10, last_hit=None, last_hit_direction=None, previ
     # If all else fails, choose a random coordinate
     return (random.randint(0, board_size - 1), random.randint(0, board_size - 1))
 
-def ai_opponent_game_loop():
+def ai_opponent_game_loop() -> None:
     '''Game loop with AI multiplayer starts. Greets first, sets up the board and uses multiple game components.'''
     greet = "Welcome to the Multiplayer Battleship Game!"
     print(greet)
