@@ -8,12 +8,25 @@ previous_hits = set()
 engine = pyttsx3.init()  
 
 def speak(audio: str) -> None:
-    '''For extra purposes'''
+    """Making the game more interactive.
+
+    Args:
+        audio (str): To read and speak the lines.
+    """
     engine.say(audio)
     engine.runAndWait()
 
 def attack(coordinates: Tuple[int, int], board: List[List[Union[None, str]]], battleships: Dict[str, int]) -> bool:
-    '''Does the attack function.'''
+    """Checks whether the target misses or hits or a battleship is sunk.
+
+    Args:
+        coordinates (Tuple[int, int]): The coordinates it receives.
+        board (List[List[Union[None, str]]]): The 10x10 board.
+        battleships (Dict[str, int]): The ship's info.
+
+    Returns:
+        bool: True or False to indicate hit or miss.
+    """
     x, y = coordinates
     target = board[y][x] #Was originally board[x][y] but modified after logic error...
 
@@ -32,7 +45,11 @@ def attack(coordinates: Tuple[int, int], board: List[List[Union[None, str]]], ba
     return False
 
 def cli_coordinates_input() -> Tuple[int, int]:
-    '''Ask user for the X and Y coordinates.'''
+    """Asks user for x and y coordinates.
+
+    Returns:
+        Tuple[int, int]: The coordinates of where it wants to hit.
+    """
     while True:
         try:
             x = int(input("Enter the X coordinate: "))
@@ -56,12 +73,18 @@ def cli_coordinates_input() -> Tuple[int, int]:
             print("Invalid input. Please enter numeric values for coordinates.")
 
 def print_board_hits(board: List[List[Union[None, str]]]) -> None:
-    '''Prints the board. If a coordinate of a board is hit, an X is returned to the board.'''
+    """Prints the board. If a coordinate of a board is hit, an X is returned to the board.
+    Returns None from attack for main.py to work instead of 'X'.
+
+    Args:
+        board (List[List[Union[None, str]]]): The 10x10 grid.
+    """
     for row in board:
         print(" ".join('X' if cell == 'X' else '.' if cell is None else cell for cell in row))
 
 def simple_game_loop() -> None:
-    '''Starts the game'''
+    """Starts the game.
+    """
     print("Welcome to the Battleship Game!")
 
     #Initialize the board, create and place battleships

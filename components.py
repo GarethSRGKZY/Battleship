@@ -5,12 +5,26 @@ from typing import List, Dict, Union, Any, Literal
 
 #Initialise board
 def initialise_board(size: int = 10) -> List[List[Union[None, Any]]]:
-    '''Returns a 10 x 10 board with the word None.'''
+    """Returns a 10 x 10 grid with the word None.
+
+    Args:
+        size (int, optional): size of board defaults to 10.
+
+    Returns:
+        List[List[Union[None, Any]]]: a list with 10 lists with the word None
+    """
     return [[None] * size for _ in range(size)]
 
 #create battleships
 def create_battleships(filename: str = "battleships.txt") -> Dict[str, int]:
-    '''Opens battleship.txt file as filename is default.'''
+    """Opens battleship.txt file.
+
+    Args:
+        filename (str, optional): filename defaults to "battleships.txt".
+
+    Returns:
+        Dict[str, int]: dictionary of the info of the battleship.
+    """
     with open(filename, 'r', encoding="utf-8") as file:
         battleships_data = file.readlines()
 
@@ -22,7 +36,14 @@ def create_battleships(filename: str = "battleships.txt") -> Dict[str, int]:
     return battleships
 
 def placement_from_file(filename: str = "placement.json") -> Dict[str, List[int]]:
-    '''Parsing the JSON file'''
+    """Parses the JSON file
+
+    Args:
+        filename (str, optional): filename defaults to "placement.json".
+
+    Returns:
+        Dict[str, List[int]]: dictionary of the json file.
+    """
     with open(filename, 'r',  encoding="utf-8") as file:
         placement_json = file.read()
         placement_data = json.loads(placement_json)
@@ -30,7 +51,20 @@ def placement_from_file(filename: str = "placement.json") -> Dict[str, List[int]
 
 #Place battleships
 def place_battleships(board: List[List[Union[None, Any]]], ships: Dict[str, int], algorithm: Literal['simple', 'random', 'custom'] = 'simple', placement_data: Dict[str, List[int]] = placement_from_file("placement.json")) -> List[List[Union[None, Any]]]:
-    '''Battleship will be placed according to the algorithm'''
+    """Battleship placed according to algorithm.
+
+    Args:
+        board (List[List[Union[None, Any]]]): The 10x10 grid for battleship.
+        ships (Dict[str, int]): The dictionary containing the ship's info.
+        algorithm (Literal[&#39;simple&#39;, &#39;random&#39;, &#39;custom&#39;], optional): default algorithm is 'simple'.
+        placement_data (Dict[str, List[int]], optional): reads the json file from the function placement_from_file("placement.json").
+
+    Raises:
+        ValueError: raises invalid algorithm.
+
+    Returns:
+        List[List[Union[None, Any]]]: The 10x10 grid for battleship.
+    """
     if algorithm == 'simple':
         return simple_placement(board, ships)
     elif algorithm == 'random':
@@ -42,7 +76,15 @@ def place_battleships(board: List[List[Union[None, Any]]], ships: Dict[str, int]
 
 #Simple
 def simple_placement(board: List[List[Union[None, Any]]], ships: Dict[str, int]) -> List[List[Union[None, Any]]]:
-    '''Simple algorithm: Placing ships in horizontal rows only. Starting from (0,0)'''
+    """The algorithm for simple placement.
+
+    Args:
+        board (List[List[Union[None, Any]]]): The 10x10 grid for the battleship game.
+        ships (Dict[str, int]): The dictionary of the ship's info.
+
+    Returns:
+        List[List[Union[None, Any]]]: The 10x10 grid for the battleship game.
+    """
     row = 0
     for ship_name, ship_size in ships.items():
         for i in range(ship_size):
@@ -52,7 +94,15 @@ def simple_placement(board: List[List[Union[None, Any]]], ships: Dict[str, int])
 
 #Random
 def random_placement(board: List[List[Union[None, Any]]], ships: Dict[str, int]) -> List[List[Union[None, Any]]]:
-    '''Random algorithm: Placing ships in either horizontal or vertical. Placing ships in random coordinates.'''
+    """Randomly places the ship on the board.
+
+    Args:
+        board (List[List[Union[None, Any]]]): The 10x10 grid for the battleship game.
+        ships (Dict[str, int]): The dictionary of the ship's info.
+
+    Returns:
+        List[List[Union[None, Any]]]: The 10x10 grid for the battleship game.
+    """
     for ship_name, ship_size in ships.items():
         placed = False
         while not placed:
@@ -75,7 +125,16 @@ def random_placement(board: List[List[Union[None, Any]]], ships: Dict[str, int])
 
 #Custom
 def custom_placement(board: List[List[Union[None, Any]]], ships: Dict[str, int], placement_data: Dict[str, List[int]] = placement_from_file("placement.json")) -> List[List[Union[None, Any]]]:
-    '''Custom algorithm: This is according to the placement.json file.'''
+    """Battleships placed depending on how the user has placed the battleship. Read according to the json file.
+    
+    Args:
+        board (List[List[Union[None, Any]]]): The 10x10 grid for the battleship game.
+        ships (Dict[str, int]): The dictionary of the ship's info.
+        placement_data (Dict[str, List[int]], optional): reads the json file from the function placement_from_file("placement.json").
+
+    Returns:
+        List[List[Union[None, Any]]]: The 10x10 grid for the battleship game.
+    """
     for ship_name, position in placement_data.items():
         col, row, orientation = map(str, position)
         col, row= int(col), int(row)

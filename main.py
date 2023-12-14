@@ -8,9 +8,11 @@ from mp_game_engine import generate_attack
 app = Flask(__name__)
 
 class BattleshipGame:
-    '''Class for all the variables'''
+    """Class for all the variables
+    """
     def reset(self) -> None:
-        '''Resets the whole board so that there is no "hijacking"'''
+        """Resets board so next round does not hijack the game.
+        """
         self.user_board = initialise_board(size=self.board_size)
         self.ai_board = initialise_board(size=self.board_size)
         self.user_ships = create_battleships()
@@ -39,26 +41,35 @@ class BattleshipGame:
         self.last_hit = None
         self.last_hit_direction = None
 
-        # Place ships on boards
-        '''
-        place_battleships(self.user_board, self.user_ships, algorithm='custom')
-        place_battleships(self.ai_board, self.ai_ships, algorithm='random')
-        '''
-
     def render_main_template(self, game_finished_message: Optional[str] = None) -> str:
-        '''Renders the main board. When game is finished, message is displayed.'''
+        """Renders the main board. Displays message if game is finished.
+
+        Args:
+            game_finished_message (Optional[str], optional): Displays when game is finished. Defaults to None.
+
+        Returns:
+            str: finished message.
+        """
         print(self.user_board)
         return render_template('main.html', player_board=self.user_board, game_finished_message=game_finished_message)
 
     def render_placement_template(self) -> str:
-        '''Renders the placement board'''
+        """Renders the main template.
+
+        Returns:
+            str: the ship and the board.
+        """
         return render_template('placement.html', ships=self.ships, board_size=self.board_size)
 
 battleship_game = BattleshipGame()
 
 @app.route('/placement', methods=['GET', 'POST'])
 def placement_interface() -> Union[str, Any]:
-    '''Renders the board placement first. If placement is done, messages display a success message.'''
+    """Renders placement board. When placement is done, it stores the placement as a json file and displays a message.
+
+    Returns:
+        Union[str, Any]: The placement data with the ships coordinates and the spaces.
+    """
     if request.method == 'GET':
         return battleship_game.render_placement_template()
     elif request.method == 'POST':
@@ -71,7 +82,11 @@ def placement_interface() -> Union[str, Any]:
 
 @app.route('/', methods=['GET', 'POST'])
 def root() -> str:
-    '''Renders the main board'''
+    """Renders the main board.
+
+    Returns:
+        str: finished message.
+    """
     if request.method == 'GET':
         return battleship_game.render_main_template()
     elif request.method == 'POST':
@@ -81,9 +96,11 @@ def root() -> str:
 
 @app.route('/attack', methods=['GET'])
 def process_attack() -> Union[str, Any]:
-    '''
-    Does all the hits and misses, implementing the game logic.
-    '''
+    """Implementing the game logic for the hits and misses and the AI algorithm.
+
+    Returns:
+        Union[str, Any]: The battleship placement data and its situation.
+    """
     if request.args:
         x = int(request.args.get('x'))
         y = int(request.args.get('y'))

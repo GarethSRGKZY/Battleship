@@ -7,11 +7,17 @@ from components import initialise_board, create_battleships, place_battleships
 players = {}
 
 def generate_attack(board_size: int = 10, last_hit: Optional[Tuple[int, int]] = None, last_hit_direction: Optional[Tuple[int, int]] = None, previous_miss: Optional[Set[Tuple[int, int]]] = None) -> Tuple[int, int]:
-    '''
-    AI randomly chooses a coordinate to attack
-    If there is no hit on a battleship, it returns a random coordinate
-    If there is a hit on a battleship, it will deduce where the battleship is.
-    '''
+    """_summary_
+
+    Args:
+        board_size (int, optional): The 10x10 grid for battleship.
+        last_hit (Optional[Tuple[int, int]], optional): Stores previous successful hit. Defaults to None if missed.
+        last_hit_direction (Optional[Tuple[int, int]], optional): Stores possible adjacent coordinates for battleship. Defaults to None if missed.
+        previous_miss (Optional[Set[Tuple[int, int]]], optional): Stores previous misses. Defaults to None if hit.
+
+    Returns:
+        Tuple[int, int]: The AI coordinates.
+    """
     if last_hit is None:
         return (random.randint(0, board_size - 1), random.randint(0, board_size - 1))
 
@@ -31,7 +37,8 @@ def generate_attack(board_size: int = 10, last_hit: Optional[Tuple[int, int]] = 
     return (random.randint(0, board_size - 1), random.randint(0, board_size - 1))
 
 def ai_opponent_game_loop() -> None:
-    '''Game loop with AI multiplayer starts. Greets first, sets up the board and uses multiple game components.'''
+    """Starts the game with the AI.
+    """
     greet = "Welcome to the Multiplayer Battleship Game!"
     print(greet)
     speak(greet)
