@@ -5,6 +5,8 @@ This project is a python interpretation of the board game battleships.
 Battleships is a strategy game involving 2 players to guess which coordinate on the grid has the battleship.
 The player that hits all battleships wins the game. 
 
+Note: This project was the coursework task for ECM1400 Comp Sci BSC University of Exeter.
+
 -----------------------
 
 
