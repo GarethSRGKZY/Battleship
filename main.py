@@ -20,6 +20,7 @@ class BattleshipGame:
         self.hit_before = set() #resets list of coordinates where player has hit before
         self.ai_hit_before = set() #resets list of coordinates where AI has hit before
         self.ai_previous_miss = set()#resets list of coordinates where AI has missed before
+        self.ai_previous_hits = set()#sets list of coordinates where AI has last hit
 
     def __init__(self):
         self.ships = {
@@ -38,6 +39,7 @@ class BattleshipGame:
         self.hit_before = set() #Set list of coordinates where player has hit before
         self.ai_hit_before = set() #Set list of coordinates where AI has hit before
         self.ai_previous_miss = set()#sets list of coordinates where AI has missed before
+        self.ai_previous_hits = set()#sets list of coordinates where AI has last hit
         self.last_hit = None
         self.last_hit_direction = None
 
@@ -120,20 +122,22 @@ def process_attack() -> Union[str, Any]:
         ai_turn = None
 
         for _ in range(max_attempts):
-            ai_turn = generate_attack(battleship_game.board_size, battleship_game.last_hit, battleship_game.last_hit_direction, battleship_game.ai_previous_miss)
+            ai_turn = generate_attack(battleship_game.board_size, battleship_game.last_hit, battleship_game.last_hit_direction, battleship_game.ai_previous_miss, battleship_game.ai_previous_hits)
 
             if ai_turn not in battleship_game.ai_hit_before:
                 break
 
         # If the AI cannot find a suitable coordinate, choose a random one
         if ai_turn is None or ai_turn in battleship_game.ai_hit_before:
-            ai_turn = generate_attack(battleship_game.board_size, battleship_game.last_hit, battleship_game.last_hit_direction, battleship_game.ai_previous_miss)
+            ai_turn = generate_attack(battleship_game.board_size, battleship_game.last_hit, battleship_game.last_hit_direction, battleship_game.ai_previous_miss, battleship_game.ai_previous_hits)
 
         ## User attacks
         ai_result = attack(ai_turn, battleship_game.user_board, battleship_game.user_ships)
 
         if not ai_result:
             battleship_game.ai_previous_miss.add(ai_turn)
+        else:
+            battleship_game.ai_previous_hits.add(ai_turn)
 
         battleship_game.last_hit = ai_turn if ai_result else None
         battleship_game.last_hit_direction = None if ai_result else battleship_game.last_hit_direction
