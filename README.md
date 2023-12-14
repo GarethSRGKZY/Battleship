@@ -85,3 +85,7 @@ The `'/'` route renders the `main.html` when there is a "GET" request in order t
 The `'/attack'` route requests for the x and y coordinates from the user. In this case, getting the coordinates on where the user has clicked. If the coordinates was hit before, it will allow you to click anywhere in the grid except from the one that you have clicked before. Else, it will store that coordinate in the list. The same goes for the AI. Then it displays the appropriate message depending on who has all their battleships sunk.
 
 Note: Because global variables are a bad practice in python, I decided to use a class.
+
+## License and Copyright
+© Gareth, student
+Licensed under the [MIT License](LICENSE)
