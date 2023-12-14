@@ -7,7 +7,7 @@ from components import initialise_board, create_battleships, place_battleships
 players = {}
 
 def generate_attack(board_size: int = 10, last_hit: Optional[Tuple[int, int]] = None, last_hit_direction: Optional[Tuple[int, int]] = None, previous_miss: Optional[Set[Tuple[int, int]]] = None) -> Tuple[int, int]:
-    """_summary_
+    """AI randomly guesses coordinates at first. If it hits a battleship, it will try to hit the adjacent coordinates.
 
     Args:
         board_size (int, optional): The 10x10 grid for battleship.
