@@ -88,4 +88,5 @@ Note: Because global variables are a bad practice in python, I decided to use a 
 
 ## License and Copyright
 © Gareth, student
+
 Licensed under the [MIT License](LICENSE)
