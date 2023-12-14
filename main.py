@@ -13,8 +13,9 @@ class BattleshipGame:
         self.ai_board = initialise_board(size=self.board_size)
         self.user_ships = create_battleships()
         self.ai_ships = create_battleships()
-        self.hit_before = set() #Set list of coordinates where player has hit before
-        self.ai_hit_before = set() #Set list of coordinates where AI has hit before
+        self.hit_before = set() #resets list of coordinates where player has hit before
+        self.ai_hit_before = set() #resets list of coordinates where AI has hit before
+        self.ai_previous_miss = set()#resets list of coordinates where AI has missed before
 
     def __init__(self):
         self.ships = {
@@ -32,6 +33,7 @@ class BattleshipGame:
         self.ai_ships = create_battleships()
         self.hit_before = set() #Set list of coordinates where player has hit before
         self.ai_hit_before = set() #Set list of coordinates where AI has hit before
+        self.ai_previous_miss = set()#sets list of coordinates where AI has missed before
         self.last_hit = None
         self.last_hit_direction = None
 
@@ -62,7 +64,7 @@ def placement_interface():
         battleship_game.reset()
         place_battleships(battleship_game.ai_board, battleship_game.ai_ships, algorithm='random')
         place_battleships(battleship_game.user_board, battleship_game.user_ships, algorithm='custom', placement_data=battleship_game.placement)
-        print(battleship_game.placement)
+        ##print(battleship_game.placement)
         return jsonify({"message": "Received!"})
 
 @app.route('/', methods=['GET', 'POST'])
@@ -99,23 +101,27 @@ def process_attack():
         ai_turn = None
 
         for _ in range(max_attempts):
-            ai_turn = generate_attack(battleship_game.board_size, battleship_game.last_hit, battleship_game.last_hit_direction)
+            ai_turn = generate_attack(battleship_game.board_size, battleship_game.last_hit, battleship_game.last_hit_direction, battleship_game.ai_previous_miss)
 
             if ai_turn not in battleship_game.ai_hit_before:
                 break
 
         # If the AI cannot find a suitable coordinate, choose a random one
         if ai_turn is None or ai_turn in battleship_game.ai_hit_before:
-            ai_turn = generate_attack(battleship_game.board_size, battleship_game.last_hit, battleship_game.last_hit_direction)
+            ai_turn = generate_attack(battleship_game.board_size, battleship_game.last_hit, battleship_game.last_hit_direction, battleship_game.ai_previous_miss)
 
         ## User attacks
         ai_result = attack(ai_turn, battleship_game.user_board, battleship_game.user_ships)
+
+        if not ai_result:
+            battleship_game.ai_previous_miss.add(ai_turn)
 
         battleship_game.last_hit = ai_turn if ai_result else None
         battleship_game.last_hit_direction = None if ai_result else battleship_game.last_hit_direction
 
         # AI coordinates are added to a list that are hit before
         battleship_game.ai_hit_before.add(ai_turn)
+        
 
         ##print("AI: ", battleship_game.ai_ships)
         ##print("USER: ", battleship_game.user_ships)

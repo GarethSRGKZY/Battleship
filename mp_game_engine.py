@@ -5,7 +5,7 @@ from components import initialise_board, create_battleships, place_battleships
 
 players = {}
 
-def generate_attack(board_size=10, last_hit=None, last_hit_direction=None):
+def generate_attack(board_size=10, last_hit=None, last_hit_direction=None, previous_miss=None):
     '''
     AI randomly chooses a coordinate to attack
     If there is no hit on a battleship, it returns a random coordinate
@@ -13,19 +13,20 @@ def generate_attack(board_size=10, last_hit=None, last_hit_direction=None):
     '''
     if last_hit is None:
         return (random.randint(0, board_size - 1), random.randint(0, board_size - 1))
+
     x, y = last_hit
-    directions = [(0, 1), (1, 0), (0, -1), (-1, 0)] 
-    if last_hit_direction is None:
-        last_hit_direction = random.choice(directions)
-    next_x, next_y = x + last_hit_direction[0], y + last_hit_direction[1]
-    if 0 <= next_x < board_size and 0 <= next_y < board_size:
-        return (next_x, next_y)
+    directions = [(0, 1), (1, 0), (0, -1), (-1, 0)] + [(1, 1), (1, -1), (-1, 1), (-1, -1)]
+
+    # If there's a previous direction, prioritize it
+    if last_hit_direction is not None:
+        directions = [last_hit_direction] + [d for d in directions if d != last_hit_direction]
 
     for direction in directions:
         next_x, next_y = x + direction[0], y + direction[1]
-        if 0 <= next_x < board_size and 0 <= next_y < board_size:
+        if 0 <= next_x < board_size and 0 <= next_y < board_size and (next_x, next_y) not in previous_miss:
             return (next_x, next_y)
-    
+
+    # If all else fails, choose a random coordinate
     return (random.randint(0, board_size - 1), random.randint(0, board_size - 1))
 
 def ai_opponent_game_loop():
@@ -44,7 +45,7 @@ def ai_opponent_game_loop():
     ai_ships = create_battleships()
 
     # Custom placement for the user
-    to_user = "Your placement is according to the .json file. Please configure your setup using the placement.json file next game."
+    to_user = "Your placement is according to the placement.json file. Please configure your setup using the placement.json file next game."
     print(to_user)
     speak(to_user)
     place_battleships(user_board, user_ships, algorithm='custom')
@@ -57,6 +58,7 @@ def ai_opponent_game_loop():
 
     last_hit = None
     last_hit_direction = None
+    previous_miss = set()
 
     while any(size > 0 for size in user_ships.values()) and any(size > 0 for size in ai_ships.values()):
         user = "It is your turn, user:"
@@ -73,8 +75,10 @@ def ai_opponent_game_loop():
             break
 
         print("\nAI Opponent's Turn:")
-        ai_coordinates = generate_attack(board_size, last_hit, last_hit_direction)
+        ai_coordinates = generate_attack(board_size, last_hit, last_hit_direction, previous_miss)
         ai_result = attack(ai_coordinates, user_board, user_ships)
+        if not ai_result:
+            previous_miss.add(ai_coordinates)
         last_hit = ai_coordinates if ai_result else None
         last_hit_direction = None if ai_result else last_hit_direction
         print_board_hits(user_board)
@@ -84,7 +88,6 @@ def ai_opponent_game_loop():
             print("Game Over - The AI wins! The revolution has begun...")
             speak("Hahahahaha! The AI revolution has begun!")
             break
-
 
 if __name__ == "__main__":
     ai_opponent_game_loop()
