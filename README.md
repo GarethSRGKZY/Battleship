@@ -56,6 +56,7 @@ If whole battleship was hit, it displays a message saying the type of battleship
 * The `print_board_hits()` function will display where the battleship is hit. However, this was changed from `X` to `None` in the `attack()` function in the line `board[y][x] = None` in order to support the web interface. Hence when a ship is hit, it will display a dot instead.
 
 * The simple_game_loop()` function is using the previous functions in `game_engine.py` to test whether the system works.
+
 Note: For some reason, when this file is run, the board is a 9x9 grid starting from (1,1) to (9, 9) but accepts (0,0) as a coordinate.
 
 ### mp_game_engine.py
