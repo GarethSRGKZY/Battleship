@@ -1,46 +1,40 @@
 # README
-========
 
 # BATTLESHIPS
-------------
 This project is a python interpretation of the board game battleships.
 Battleships is a strategy game involving 2 players to guess which coordinate on the grid has the battleship.
 The player that hits all battleships wins the game. 
+-----------------------
 
-===================================================================
 
 # Pytest
--------
 This test was run with the test files provided and with the command `python -m pytest` on the terminal / command prompt
-24 passed, 6 warnings
-===================================================================
+(24 passed, 6 warnings)
+-----------------------
 
 Installation requirements via
 `pip install -r requirements.txt`
 in terminal / command prompt
+------------------------
 
-====================================================================
 
 ## How to use this program
---------------------------
 To run the game to play against the AI without web interface:
 ..* Run the mp_game_engine.py file. This includes the speaking feature to make it more fun or personal.
 
 To run the game to play against the AI with the web interface:
 ..* Run the main.py file. This will not include the speaking feature unfortunately as it might crash the game. The page should consists of two 10x10 grids that are empty. To place your battleship, on the link, type `/placement` to place the battleship.
 
-====================================================================
 
 ## How it works
----------------
 This program consists of 4 different python files and 2 htmls to make this simple battleship game.
 
-##### components.py
+### components.py
 -------------------
 `Components.py` consists of 7 functions which renders the 10x10 board, reads `battleships.txt`, reads `placement.json`
 and the function which leads to 3 other functions which has the simple algorithm, random algorithm or custom algorithm.
 
-##### game_engine.py
+### game_engine.py
 --------------------
 `game_engine.py` consists some functions that was made from components.py: 
 ..* The `speak()` fucntion is used for speaking purposes.
@@ -51,14 +45,14 @@ If whole battleship was hit, it displays a message saying the type of battleship
 ..* The simple_game_loop()` function is using the previous functions in `game_engine.py` to test whether the system works.
 Note: For some reason, when this file is run, the board is a 9x9 grid starting from (1,1) to (9, 9) but accepts (0,0) as a coordinate.
 
-##### mp_game_engine.py
+### mp_game_engine.py
 --------------------
 `mp_game_engine.py` consists some functions that was made from `components.py` and `game_engine.py`:
 ..* The `generate_attack()` function is a function where the AI will randomly guess a coordinate on where the battleship is. This was further improved by a bit as when the AI hits a battleship, it will check the adjacent coordinates. If the AI hits, it will check the adjacent coordinates again. If the AI misses however, it will go back to randomly choosing a coordinate.
 ..* The `ai_opponent_game_loop()` function uses the functions from `game_engine.py` and `components.py` to run the game where the user plays with the AI. It also implements the speak function to get more interaction.
 Note: When this file is run, if you want to change the board placements, change the placements in the placement.json file.
 
-##### main.py
+### main.py
 -------------
 `main.py` consists of some functions that was made from `mp_game_engine.py`, `components.py` and `game_engine.py`.
 The class contains the functions that:
@@ -72,4 +66,3 @@ The `'/'` route renders the `main.html` when there is a "GET" request in order t
 The `'/attack'` route requests for the x and y coordinates from the user. In this case, getting the coordinates on where the user has clicked. If the coordinates was hit before, it will allow you to click anywhere in the grid except from the one that you have clicked before. Else, it will store that coordinate in the list. The same goes for the AI. Then it displays the appropriate message depending on who has all their battleships sunk.
 
 Note: Because global variables are a bad practice in python, I decided to use a class.
-======================================================================================
