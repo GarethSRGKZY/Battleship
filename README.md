@@ -29,10 +29,12 @@ in terminal / command prompt
 ## How to use this program
 To run the game to play against the AI without web interface:
 
+* At `game_engine.py`, at this line `board[y][x] = None` in the attack function, change `None` into `"X"`.
 * Run the `mp_game_engine.py` file. This includes the speaking feature to make it more fun or personal.
 
 To run the game to play against the AI with the web interface:
 
+* If you had changed `None` to `"X"` in the attack function in this line `board[y][x] = None`, change it back to `None`.
 * Run the main.py file. This will not include the speaking feature unfortunately as it might crash the game. Click on the link provided in the terminal. The page should consist of two 10x10 grids that are empty. To place your battleship, on the link, type `/placement` to place the battleships and click "Send Game". The game should start.
 
 ----------
