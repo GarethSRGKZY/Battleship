@@ -39,7 +39,7 @@ class BattleshipGame:
         self.hit_before = set() #Set list of coordinates where player has hit before
         self.ai_hit_before = set() #Set list of coordinates where AI has hit before
         self.ai_previous_miss = set()#sets list of coordinates where AI has missed before
-        self.ai_previous_hits = set()#sets list of coordinates where AI has last hit
+        self.ai_previous_hits = set()#sets list of coordinates where AI has last hit (When 2 ships are adjacent to each other.)
         self.last_hit = None
         self.last_hit_direction = None
 
