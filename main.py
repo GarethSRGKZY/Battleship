@@ -165,7 +165,7 @@ if __name__ == "__main__":
 ##AI did not play when the user hits the board multiple times. (Improving the AI's ability to accurately hit the battleship).
 ##When restarting, the ship does not reset. (Fixed)
 ##Game freezes after a certain amount of moves when improving AI attacks (Fixed)
-#########################################################################################################################################
+##############################################################################
 ##Fixed
 ##Placement error due to 2 reasons: 1. Inverted board from components.py (indexing error) 2.Board was not reset, more ships were added to an existing board on player's grid (Causing more confusion).
 ##Same spot error fixed. Needed to add a set list.
@@ -173,7 +173,7 @@ if __name__ == "__main__":
 ##Needed to add another result for the AI
 ##Put the hit_before and ai_hit_before in the class.
 ##Had to change while loop to for loop as while loop iterates the whole thing.
-#########################################################################################################################################
+##############################################################################
 ##Note
 ##There may be a bug where one spot does not change colour when it is targeted.
 ##AI is slightly enhanced.
