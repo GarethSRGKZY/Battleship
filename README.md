@@ -43,33 +43,41 @@ This project has reached the minimum requirements specified by the specification
 
 ### Components.py
 ----------
-`initialise_board` renders the 10x10 board. Coordinates of (0,0) to (9,9)
-`create_battleship` contains the info from battleships.txt
-`place_battleships` will place the battleship depending on the algorithm given.
+* `initialise_board` renders the 10x10 board. Coordinates of (0,0) to (9,9)
+
+* `create_battleship` contains the info from battleships.txt
+
+*`place_battleships` will place the battleship depending on the algorithm given.
 
 ----------
 
 ### game_engine.py
 ----------
-`attack` determines whether the battleship is hit or missed or the whole of the battleship is sunk.
-`cli_coordinates_input` asks the user for the x and y coordinates between the range of 0-9.
-`simple_game_loop` runs the game using the functions from components.py and the previous functions in the `game_engine` file.
+* `attack` determines whether the battleship is hit or missed or the whole of the battleship is sunk.
+
+* `cli_coordinates_input` asks the user for the x and y coordinates between the range of 0-9.
+
+* `simple_game_loop` runs the game using the functions from components.py and the previous functions in the `game_engine` file.
 
 ----------
 
 ### mp_game_engine.py
 ----------
-`generate_attack` is the attack function for the AI.
-`ai_opponent_game_loop` runs the game using the functions in `mp_game_engine` file, `components.py` file and the `game_engine.py` file.
+* `generate_attack` is the attack function for the AI.
+
+* `ai_opponent_game_loop` runs the game using the functions in `mp_game_engine` file, `components.py` file and the `game_engine.py` file.
 
 ----------
 
 ### main.py
 ----------
 This file uses classes.
-`/placement` route renders the placement board in placement.html and stores the placement data in a json file when the user is done placing.
-`/` route renders the main board in main.html and uses the placement data from placement.html into the player's grid.
-`/attack` route contains the function for AI and the user to attack. Displays finished message depending on which who has sunk all the opponent's battlehsips.
+
+* `/placement` route renders the placement board in placement.html and stores the placement data in a json file when the user is done placing.
+
+* `/` route renders the main board in main.html and uses the placement data from placement.html into the player's grid.
+
+* `/attack` route contains the function for AI and the user to attack. Displays finished message depending on which who has sunk all the opponent's battlehsips.
 
 ----------
 
